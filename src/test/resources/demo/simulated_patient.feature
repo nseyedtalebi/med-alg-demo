@@ -28,7 +28,6 @@ Background:
     When checked for a pulse
     Then the result should be positive
 
-  Rule: Pulmonary ascultation is possible only if the patient is breathing
     Scenario: Pulmonary ascultation is possible only if the patient is breathing
       Given the patient is breathing
       When pulmonary ascultation is attempted
@@ -55,7 +54,27 @@ Background:
     When the patient's blood pressure is checked
     Then report that the patient has hypotension
 
-  Rule: Patients can only be tested/examined/queried in the ways described herein
-  Rule: We don't know anything about new patients/can't assume anything about new patients
-  Rule: Our simulated patients do not change state - they represent snapshots of the real world at a particular
-  (if hypothetical) point in time
+  Scenario: We don't know anything about new patients/can't assume anything about new patients
+    When the patient is a new patient
+    Then we do not know if they are responsive to verbal stimuli
+      And we do not know if they are responsive to tactile stimuli
+      And we do not know if they were submerged for more or less than an hour
+      And we do not know whether pulmonary ascultation produces normal or abnormal results
+      And we do not know if rales are present in some or all pulmonary fields
+      And we do not know if the patient is hypotensive or in shock
+      And we do not know if the patient is breathing
+      And we do not know if the patient has a cough
+      And we do not know if the patient is dead
+      And we do not know which grade the patient should be assigned
+
+  Scenario: What happens when we examine the patient?
+    When we examine the patient for something
+    Then report the result of that examination
+    But not when the examination violates a rule
+
+  Scenario: What happens when we try to do an invalid examination?
+    When we attempt an examination that violates a rule
+    Then report an error and discard the result
+
+
+
